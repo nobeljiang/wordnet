@@ -1,6 +1,6 @@
 public class SAP {
-    Digraph graph;
-    int anc;
+    private Digraph graph;
+    private int anc;
     
     // constructor takes a digraph (not necessarily a DAG)
     public SAP(Digraph G) {
@@ -16,21 +16,21 @@ public class SAP {
         BreadthFirstDirectedPaths dfsv = new BreadthFirstDirectedPaths(graph, v);
         BreadthFirstDirectedPaths dfsw = new BreadthFirstDirectedPaths(graph, w);
         boolean flag = false;
-        if (v>graph.V() || w > graph.V())
+        if (v > graph.V() || w > graph.V())
             return -1;
         else {
-            for(int x = 0; x < graph.V(); x++) {
-                if(dfsv.hasPathTo(x) && dfsw.hasPathTo(x)) {
-                    for(int tmp: dfsv.pathTo(x))
+            for (int x = 0; x < graph.V(); x++) {
+                if (dfsv.hasPathTo(x) && dfsw.hasPathTo(x)) {
+                    for (int tmp: dfsv.pathTo(x))
                         len++;
-                    for(int tmp: dfsw.pathTo(x))
+                    for (int tmp: dfsw.pathTo(x))
                         len++;
                     
                     if (!flag) {
                         anc = x;
                         shortlength = len;
                     }
-                    else if(len < shortlength) {
+                    else if (len < shortlength) {
                         anc = x;
                         shortlength = len;
                     }
@@ -49,20 +49,19 @@ public class SAP {
                 
     }        
 
-        
-
-    // a common ancestor of v and w that participates in a shortest ancestral path; -1 if no such path
+    // a common ancestor of v and w that participates in a shortest ancestral path; 
+    // -1 if no such path
     public int ancestor(int v, int w) {
-        if (v>graph.V() || w > graph.V())
+        if (v > graph.V() || w > graph.V())
             return -1;
         else
             length(v, w);
         
         return anc;
     }  
-                
 
-    // length of shortest ancestral path between any vertex in v and any vertex in w; -1 if no such path
+    // length of shortest ancestral path between any vertex in v and any vertex in w;
+    // -1 if no such path
     public int length(Iterable<Integer> v, Iterable<Integer> w) {
         int len = 0;
         int shortlength = 0;
@@ -71,13 +70,13 @@ public class SAP {
         for (int x: v) {
             for (int y: w) {
                 len = length(x, y);
-                if(len != -1)
+                if (len != -1)
                     flag = true;
                 
                 if (!flag) {
                     shortlength = len;
                 }
-                else if(len < shortlength) {
+                else if (len < shortlength) {
                     shortlength = len;
                 }
             }
@@ -86,14 +85,13 @@ public class SAP {
                 
     }    
 
-
-    // a common ancestor that participates in shortest ancestral path; -1 if no such path
+    // a common ancestor that participates in shortest ancestral path;
+    // -1 if no such path
     public int ancestor(Iterable<Integer> v, Iterable<Integer> w) {
         length(v, w);
         
         return anc;
     } 
-
     
     // do unit testing of this class
     public static void main(String[] args) {

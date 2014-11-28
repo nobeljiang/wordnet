@@ -1,40 +1,36 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
-import java.lang.NullPointerException;
+//import java.lang.NullPointerException;
 
 public class WordNet {
-    List<Integer> id;
-    List<String> noun;
-    List<String> def;
-    Digraph G;
-    SAP sap;
-    int index;
-    String shortStr = null;
+    private List<Integer> id;
+    private List<String> noun;
+    private List<String> def;
+    private Digraph G;
+    private SAP sap;
+    private String shortStr = null;
     
     // constructor takes the name of the two input files
     public WordNet(String synsets, String hypernyms) {
         In in1 = new In(synsets);
         In in2 = new In(hypernyms);
         String tmpArray;
-        int line = 0;
         id = new ArrayList<Integer>();
         noun = new ArrayList<String>();
         def = new ArrayList<String>();
         G = new Digraph(82192);
         
-        while((tmpArray = in1.readLine()) != null) {
+        while ((tmpArray = in1.readLine()) != null) {
             String[] array = tmpArray.split(",");
             id.add(Integer.parseInt(array[0]));
             noun.add(array[1]);
             def.add(array[2]);
-            //StdOut.println("id = " + id.get(line) + " noun = " + noun.get(line) + " def = " + def.get(line));
-            line++;
         }
-        while((tmpArray = in2.readLine()) != null) {
+        while ((tmpArray = in2.readLine()) != null) {
             String[] array = tmpArray.split(",");
             int num = 1;
-            while(num < array.length) {
+            while (num < array.length) {
                 int v = Integer.parseInt(array[0]);
                 int w = Integer.parseInt(array[num]);
                 G.addEdge(v, w);
@@ -59,18 +55,18 @@ public class WordNet {
     public boolean isNoun(String word) {
         boolean flag = false;
         
-        for(String nouns: nouns()) {
+        for (String nouns: nouns()) {
             String[] str = nouns.split(" ");
             int i = 0;
             
-            while(i < str.length) {
-                if(str[i].equals(word)) {
+            while (i < str.length) {
+                if (str[i].equals(word)) {
                      flag = true;
                      break;
                 }
                 i++;
             }
-            if(flag)
+            if (flag)
                 break;
         }
         return flag;
@@ -90,28 +86,27 @@ public class WordNet {
         if (!isNoun(nounB))
             return -1;
         
-        int index = 0;
-        for(String nouns1: nouns()) {
+        for (String nouns1: nouns()) {
             String[] str1 = nouns1.split(" ");
             int i = 0;
             
-             while(i < str1.length) {
+             while (i < str1.length) {
                  
-                 if(str1[i].equals(nounA)) {
+                 if (str1[i].equals(nounA)) {
                      w = 0;
-                     for(String nouns2: nouns()) {
+                     for (String nouns2: nouns()) {
                          String[] str2 = nouns2.split(" ");
                          i = 0;
             
-                         while(i < str2.length) {
-                             if(str2[i].equals(nounB)) { 
+                         while (i < str2.length) {
+                             if (str2[i].equals(nounB)) { 
                                  di = sap.length(v, w);
-                                 if(!flag) {
+                                 if (!flag) {
                                      flag = true;
                                      shortdi = di;
                                      shortStr = noun.get(sap.ancestor(v, w));
                                  }
-                                 else if(di < shortdi) {
+                                 else if (di < shortdi) {
                                      shortdi = di;
                                      shortStr = noun.get(sap.ancestor(v, w));
                                  }
@@ -131,7 +126,8 @@ public class WordNet {
     }
 
        
-   // a synset (second field of synsets.txt) that is the common ancestor of nounA and nounB
+   // a synset (second field of synsets.txt) 
+   // that is the common ancestor of nounA and nounB
    // in a shortest ancestral path (defined below)
     public String sap(String nounA, String nounB) {
         if (!isNoun(nounA))
@@ -139,7 +135,7 @@ public class WordNet {
         if (!isNoun(nounB))
             return null;
         
-        int tmp = distance(nounA, nounB);
+        distance(nounA, nounB);
           
         return shortStr;
     }
@@ -151,12 +147,10 @@ public class WordNet {
         StdOut.println("is JiangWen a noun:" + wn.isNoun("JiangWen"));
         StdOut.println("is AWOL a noun:" + wn.isNoun("AWOL")); 
         StdOut.println("is A_level a noun:" + wn.isNoun("A_level")); 
-        StdOut.println("the distance between worm and bird : " + wn.distance("worm", "bird"));
-        //StdOut.println("the distance between white_marlin and mileage:" + wn.distance("white_marlin", "mileage")); 
-        //StdOut.println("the distance between Black_Plague and black_marlin:" + wn.distance("Black_Plague", "black_marlin")); 
-        //StdOut.println("the distance between American_water_spaniel and histology:" + wn.distance("American_water_spaniel", "histology")); 
-        //StdOut.println("the distance between Brown_Swiss and barrel_roll:" + wn.distance("Brown_Swiss", "barrel_roll")); 
-        StdOut.println("the synset between worm and bird:" + wn.sap("worm", "bird"));
+        StdOut.println("the distance between worm and bird : "
+                           + wn.distance("worm", "bird"));
+        StdOut.println("the synset between worm and bird:" 
+                           + wn.sap("worm", "bird"));
     }
    
 }

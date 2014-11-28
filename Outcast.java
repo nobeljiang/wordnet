@@ -1,5 +1,6 @@
 public class Outcast {
-    WordNet wn;
+    private WordNet wn;
+    
     // constructor takes a WordNet object
     public Outcast(WordNet wordnet) {
         wn = wordnet;
@@ -10,16 +11,16 @@ public class Outcast {
         int di = 0;
         int[] dist = new int[nouns.length];
         
-        for(int i = 0; i < nouns.length; i++) {
-            for(int j = 0; j < nouns.length; j++) {
+        for (int i = 0; i < nouns.length; i++) {
+            for (int j = 0; j < nouns.length; j++) {
                 di += wn.distance(nouns[i], nouns[j]);
             }
             dist[i] = di;
             di = 0;
         }
         int index = 0;
-        for(int i = 0; i < nouns.length; i++) {
-            if(dist[i] > dist[index])
+        for (int i = 0; i < nouns.length; i++) {
+            if (dist[i] > dist[index])
                 index = i;
         }
         return nouns[index];
